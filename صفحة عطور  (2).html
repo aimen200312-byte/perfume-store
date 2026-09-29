@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>عطوري | متجر العطور</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Tahoma, Arial, sans-serif;
+            background: #f8f5f0;
+            color: #222;
+        }
+
+        /* الهيدر */
+        header {
+            background: #171717;
+            color: white;
+            padding: 18px 6%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.15);
+        }
+
+        .logo {
+            font-size: 27px;
+            font-weight: bold;
+            color: #d4af37;
+        }
+
+        .cart-button {
+            border: none;
+            background: #d4af37;
+            color: #111;
+            padding: 12px 18px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .cart-button:hover {
+            background: #f0cf5c;
+        }
+
+        /* الواجهة الرئيسية */
+        .hero {
+            min-height: 430px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 50px 20px;
+            background:
+                linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.55)),
+                url("https://images.unsplash.com/photo-1594035910387-fea47794261f?auto=format&fit=crop&w=1600&q=80")
+                center/cover;
+            color: white;
+        }
+
+        .hero-content h1 {
+            font-size: 48px;
+            margin-bottom: 18px;
+        }
+
+        .hero-content p {
+            font-size: 20px;
+            margin-bottom: 25px;
+        }
+
+        .hero-btn {
+            display: inline-block;
+            background: #d4af37;
+            color: #111;
+            text-decoration: none;
+            padding: 14px 28px;
+            border-radius: 10px;
+            font-weight: bold;
+        }
+
+        /* المنتجات */
+        .products-section {
+            padding: 60px 6%;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+        .section-title h2 {
+            font-size: 32px;
+            color: #222;
+            margin-bottom: 10px;
+        }
+
+        .section-title p {
+            color: #777;
+        }
+
+        .products {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+            gap: 25px;
+        }
+
+        .product {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            transition: 0.3s;
+        }
+
+        .product:hover {
+            transform: translateY(-6px);
+        }
+
+        .product img {
+            width: 100%;
+            height: 260px;
+            object-fit: cover;
+        }
+
+        .product-info {
+            padding: 18px;
+        }
+
+        .product-info h3 {
+            margin-bottom: 8px;
+            font-size: 20px;
+        }
+
+        .description {
+            color: #777;
+            font-size: 14px;
+            line-height: 1.7;
+            min-height: 48px;
+        }
+
+        .price {
+            color: #b18a18;
+            font-size: 21px;
+            font-weight: bold;
+            margin: 15px 0;
+        }
+
+        .add-btn {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            background: #171717;
+            color: white;
+            border-radius: 9px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .add-btn:hover {
+            background: #d4af37;
+            color: #111;
+        }
+
+        /* السلة */
+        .cart-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.55);
+            display: none;
+            z-index: 2000;
+        }
+
+        .cart {
+            position: absolute;
+            right: 0;
+            top: 0;
+            height: 100%;
+            width: min(450px, 100%);
+            background: white;
+            padding: 25px;
+            overflow-y: auto;
+        }
+
+        .cart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .cart-header h2 {
+            color: #222;
+        }
+
+        .close-cart {
+            background: #eee;
+            border: none;
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 20px;
+        }
+
+        .cart-item {
+            border-bottom: 1px solid #ddd;
+            padding: 15px 0;
+        }
+
+        .cart-item h4 {
+            margin-bottom: 8px;
+        }
+
+        .cart-item-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .quantity {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .quantity button {
+            border: none;
+            background: #eee;
+            width: 30px;
+            height: 30px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .remove-btn {
+            border: none;
+            color: #c62828;
+            background: transparent;
+            cursor: pointer;
+        }
+
+        .cart-total {
+            font-size: 23px;
+            font-weight: bold;
+            margin: 25px 0;
+            color: #b18a18;
+        }
+
+        /* نموذج العميل */
+        .customer-form {
+            margin-top: 20px;
+        }
+
+        .customer-form h3 {
+            margin-bottom: 15px;
+        }
+
+        .customer-form input,
+        .customer-form textarea {
+            width: 100%;
+            padding: 13px;
+            margin-bottom: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 15px;
+        }
+
+        .customer-form textarea {
+            min-height: 90px;
+            resize: vertical;
+        }
+
+        .whatsapp-btn {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            background: #25D366;
+            color: white;
+            border-radius: 10px;
+            font-size: 17px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .whatsapp-btn:hover {
+            background: #1ebe5d;
+        }
+
+        /* الفوتر */
+        footer {
+            background: #171717;
+            color: #ddd;
+            text-align: center;
+            padding: 30px 20px;
+            margin-top: 30px;
+        }
+
+        footer strong {
+            color: #d4af37;
+        }
+
+        /* الهاتف */
+        @media (max-width: 600px) {
+            .hero-content h1 {
+                font-size: 34px;
+            }
+
+            .hero-content p {
+                font-size: 17px;
+            }
+
+            .products-section {
+                padding: 40px 5%;
+            }
+
+            .product img {
+                height: 230px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <div class="logo">دار العرب</div>
+
+    <button class="cart-button" onclick="openCart()">
+        🛒 السلة
+        <span id="cartCount">0</span>
+    </button>
+</header>
+
+<section class="hero">
+    <div class="hero-content">
+        <h1>اكتشف عطرك المميز</h1>
+
+        <p>
+            عطور فاخرة بروائح مميزة تناسب جميع الأذواق
+        </p>
+
+        <a href="#products" class="hero-btn">
+            تسوق الآن
+        </a>
+    </div>
+</section>
+
+<section class="products-section" id="products">
+
+    <div class="section-title">
+        <h2>منتجاتنا</h2>
+        <p>اختر عطرك المفضل وأضفه إلى السلة</p>
+    </div>
+
+    <div class="products">
+
+        <!-- المنتج 1 -->
+        <div class="product">
+            <img src="https://images.unsplash.com/photo-1541643600914-78b084683601?auto=format&fit=crop&w=700&q=80">
+
+            <div class="product-info">
+                <h3>عطر Royal Oud</h3>
+
+                <p class="description">
+                    عطر فاخر برائحة خشبية دافئة ومميزة.
+                </p>
+
+                <div class="price">200 د.ل</div>
+
+                <button class="add-btn"
+                    onclick="addToCart('عطر Royal Oud', 180)">
+                    أضف إلى السلة
+                </button>
+            </div>
+        </div>
+
+        <!-- المنتج 2 -->
+        <div class="product">
+            <img src="https://images.unsplash.com/photo-1588405748880-12d1d2a59f75?auto=format&fit=crop&w=700&q=80">
+
+            <div class="product-info">
+                <h3>عطر Black Luxury</h3>
+
+                <p class="description">
+                    رائحة أنيقة وقوية مناسبة للمناسبات الخاصة.
+                </p>
+
+                <div class="price">250 د.ل</div>
+
+                <button class="add-btn"
+                    onclick="addToCart('عطر Black Luxury', 220)">
+                    أضف إلى السلة
+                </button>
+            </div>
+        </div>
+
+        <!-- المنتج 3 -->
+        <div class="product">
+            <img src="https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?auto=format&fit=crop&w=700&q=80">
+
+            <div class="product-info">
+                <h3>عطر Golden</h3>
+
+                <p class="description">
+                    عطر راقٍ برائحة جذابة وناعمة.
+                </p>
+
+                <div class="price">175 د.ل</div>
+
+                <button class="add-btn"
+                    onclick="addToCart('عطر Golden', 150)">
+                    أضف إلى السلة
+                </button>
+            </div>
+        </div>
+
+        <!-- المنتج 4 -->
+        <div class="product">
+            <img src="https://images.unsplash.com/photo-1610461888750-10bfc601b874?auto=format&fit=crop&w=700&q=80">
+
+            <div class="product-info">
+                <h3>عطر Elegance</h3>
+
+                <p class="description">
+                    رائحة عصرية وأنيقة للاستخدام اليومي.
+                </p>
+
+                <div class="price">130 د.ل</div>
+
+                <button class="add-btn"
+                    onclick="addToCart('عطر Elegance', 130)">
+                    أضف إلى السلة
+                </button>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<!-- السلة -->
+
+<div class="cart-overlay" id="cartOverlay">
+
+    <div class="cart">
+
+        <div class="cart-header">
+            <h2>🛒 سلة المشتريات</h2>
+
+            <button class="close-cart" onclick="closeCart()">
+                ×
+            </button>
+        </div>
+
+        <div id="cartItems"></div>
+
+        <div class="cart-total">
+            الإجمالي:
+            <span id="cartTotal">0</span>
+            د.ل
+        </div>
+
+        <div class="customer-form">
+
+            <h3>بيانات التوصيل</h3>
+
+            <input
+                type="text"
+                id="customerName"
+                placeholder="الاسم الكامل">
+
+            <input
+                type="tel"
+                id="customerPhone"
+                placeholder="رقم الهاتف">
+
+            <textarea
+                id="customerAddress"
+                placeholder="العنوان بالتفصيل"></textarea>
+
+            <button class="whatsapp-btn" onclick="sendToWhatsApp()">
+                📱 إرسال الطلب عبر واتساب
+            </button>
+
+        </div>
+
+    </div>
+</div>
+
+<footer>
+    <p>
+        جميع الحقوق محفوظة © 2026
+        <strong>دار العرب</strong>
+    </p>
+</footer>
+
+<script>
+
+    // رقم واتساب المتجر
+    const whatsappNumber = "218911304841";
+
+    // السلة
+    let cart = [];
+
+    // إضافة منتج
+    function addToCart(name, price) {
+
+        const existingProduct = cart.find(
+            item => item.name === name
+        );
+
+        if (existingProduct) {
+            existingProduct.quantity++;
+        } else {
+            cart.push({
+                name: name,
+                price: price,
+                quantity: 1
+            });
+        }
+
+        updateCart();
+
+        alert("تمت إضافة المنتج إلى السلة 🛒");
+    }
+
+    // تحديث السلة
+    function updateCart() {
+
+        const cartItems = document.getElementById("cartItems");
+        const cartCount = document.getElementById("cartCount");
+        const cartTotal = document.getElementById("cartTotal");
+
+        cartItems.innerHTML = "";
+
+        let total = 0;
+        let count = 0;
+
+        cart.forEach((item, index) => {
+
+            total += item.price * item.quantity;
+            count += item.quantity;
+
+            const div = document.createElement("div");
+
+            div.className = "cart-item";
+
+            div.innerHTML = `
+                <h4>${item.name}</h4>
+
+                <div class="cart-item-row">
+
+                    <div class="quantity">
+
+                        <button onclick="changeQuantity(${index}, -1)">
+                            -
+                        </button>
+
+                        <span>${item.quantity}</span>
+
+                        <button onclick="changeQuantity(${index}, 1)">
+                            +
+                        </button>
+
+                    </div>
+
+                    <strong>
+                        ${item.price * item.quantity} د.ل
+                    </strong>
+
+                    <button
+                        class="remove-btn"
+                        onclick="removeItem(${index})">
+                        حذف
+                    </button>
+
+                </div>
+            `;
+
+            cartItems.appendChild(div);
+        });
+
+        cartCount.textContent = count;
+        cartTotal.textContent = total;
+    }
+
+    // تغيير الكمية
+    function changeQuantity(index, amount) {
+
+        cart[index].quantity += amount;
+
+        if (cart[index].quantity <= 0) {
+            cart.splice(index, 1);
+        }
+
+        updateCart();
+    }
+
+    // حذف منتج
+    function removeItem(index) {
+
+        cart.splice(index, 1);
+
+        updateCart();
+    }
+
+    // فتح السلة
+    function openCart() {
+
+        document.getElementById("cartOverlay").style.display = "block";
+
+        updateCart();
+    }
+
+    // إغلاق السلة
+    function closeCart() {
+
+        document.getElementById("cartOverlay").style.display = "none";
+    }
+
+    // إرسال الطلب إلى واتساب
+    function sendToWhatsApp() {
+
+        if (cart.length === 0) {
+            alert("السلة فارغة، أضف منتجاً أولاً.");
+            return;
+        }
+
+        const name =
+            document.getElementById("customerName").value.trim();
+
+        const phone =
+            document.getElementById("customerPhone").value.trim();
+
+        const address =
+            document.getElementById("customerAddress").value.trim();
+
+        if (!name || !phone || !address) {
+
+            alert("يرجى إدخال الاسم ورقم الهاتف والعنوان.");
+
+            return;
+        }
+
+        let message = "🛍️ *طلب جديد من متجر عطوري*%0A%0A";
+
+        message += "👤 *اسم العميل:* " + name + "%0A";
+        message += "📞 *رقم الهاتف:* " + phone + "%0A";
+        message += "📍 *العنوان:* " + address + "%0A%0A";
+
+        message += "🧴 *المنتجات:*%0A";
+
+        let total = 0;
+
+        cart.forEach(item => {
+
+            const itemTotal =
+                item.price * item.quantity;
+
+            total += itemTotal;
+
+            message +=
+                "• " +
+                item.name +
+                " × " +
+                item.quantity +
+                " = " +
+                itemTotal +
+                " د.ل%0A";
+        });
+
+        message += "%0A💰 *الإجمالي: " + total + " د.ل*";
+
+        const whatsappURL =
+            "https://wa.me/" +
+            whatsappNumber +
+            "?text=" +
+            message;
+
+        window.open(whatsappURL, "_blank");
+    }
+
+</script>
+
+</body>
+</html>
